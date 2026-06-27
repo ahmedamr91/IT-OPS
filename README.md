@@ -1,39 +1,70 @@
-# Trufla IT Ops Portal - GitHub Pages Fixed Version
+# IT Ops SaaS Static Pro
 
-This is the corrected GitHub Pages static version.
+Professional GitHub Pages-ready IT Operations Portal demo.
 
-## Fixes included
+## What this version is
 
-- Correct Vite GitHub Pages base path: `/IT-OPS/`
-- GitHub Actions deploys `dist`, not raw source files
-- No backend dependency
-- No FastAPI calls
-- No `127.0.0.1` API calls
-- Static role routes:
-  - `/#/it-admin`
-  - `/#/helpdesk`
-  - `/#/security`
-  - `/#/hr`
-  - `/#/finance`
-  - `/#/viewer`
+This is a production-style static demo that works on GitHub Pages.
 
-## Run locally
+It includes:
+
+- Professional gradient UI
+- Role routes
+- Role-based navigation
+- Dashboard
+- Microsoft 365 users
+- Intune devices
+- Native asset manager
+- Asset create/edit/delete
+- HR view
+- Finance view
+- Security view
+- Reports
+- Audit logs
+- Search
+- CSV export
+- Reset demo data
+- localStorage persistence
+- GitHub Actions deployment
+
+## Role URLs
+
+After deployment:
+
+```text
+https://ahmedamr91.github.io/IT-OPS/#/it-admin
+https://ahmedamr91.github.io/IT-OPS/#/helpdesk
+https://ahmedamr91.github.io/IT-OPS/#/security
+https://ahmedamr91.github.io/IT-OPS/#/hr
+https://ahmedamr91.github.io/IT-OPS/#/finance
+https://ahmedamr91.github.io/IT-OPS/#/viewer
+```
+
+## Local run
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Build locally
+## Test production build locally
 
 ```bash
 npm run build
 npm run preview
 ```
 
-## Deploy
+## GitHub Pages setup
 
-Push to GitHub.  
-Then check:
+In GitHub:
 
-Repository → Settings → Pages → Source: GitHub Actions
+```text
+Settings -> Pages -> Source -> GitHub Actions
+```
+
+Then push to `main`.
+
+## Important
+
+Do not deploy from branch root.  
+This app must be deployed by GitHub Actions from the generated `dist` folder.
