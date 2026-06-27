@@ -476,3 +476,9 @@ tbody tr:hover td { background: rgba(248,250,252,.75); }
     animation: none;
   }
 }
+
+.splash-hint {
+  margin: -14px 0 18px;
+  color: #94a3b8;
+  font-size: 13px;
+}

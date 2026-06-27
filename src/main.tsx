@@ -180,15 +180,6 @@ function App() {
   }, [data]);
 
   useEffect(() => {
-    if (!showSplash) return;
-    const timer = window.setTimeout(() => {
-      sessionStorage.setItem('it_ops_splash_seen', 'true');
-      setShowSplash(false);
-    }, 2600);
-    return () => window.clearTimeout(timer);
-  }, [showSplash]);
-
-  useEffect(() => {
     const onHash = () => setRole(getRoleFromHash());
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
@@ -444,6 +435,7 @@ function SplashScreen({ onSkip }: { onSkip: () => void }) {
           <span className="letter">a</span>
         </div>
         <p>IT Operations Portal</p>
+        <small className="splash-hint">Click Enter Portal to continue</small>
         <div className="splash-loader">
           <span />
         </div>
