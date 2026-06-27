@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
-  Activity, AlertTriangle, Archive, Bell, Boxes, Building2, CheckCircle2,
-  ChevronRight, ClipboardList, Download, Eye, FileText, HardDrive, Laptop,
-  LayoutDashboard, Lock, Package, Pencil, Plus, RefreshCcw, Search, Shield,
-  Sparkles, Trash2, Upload, Users, WalletCards, X
+  Activity, AlertTriangle, Bell, Boxes, Building2, CheckCircle2, ChevronRight,
+  ClipboardCheck, Download, Eye, FileText, HardDrive, Headphones, Laptop,
+  LayoutDashboard, Lock, Package, Pencil, Plus, RefreshCcw, Rocket, Search,
+  Shield, Sparkles, Trash2, Users, WalletCards, X, MonitorCheck, BarChart3
 } from 'lucide-react';
 import './styles.css';
 
@@ -32,7 +32,7 @@ type Asset = {
   notes: string;
 };
 
-const STORAGE_KEY = 'it_ops_saas_static_pro_v1';
+const STORAGE_KEY = 'trufla_it_ops_portal_data_v2';
 
 const routeToRole: Record<string, RoleKey> = {
   'it-admin': 'IT_ADMIN',
@@ -52,36 +52,54 @@ const roleToRoute: Record<RoleKey, string> = {
   VIEWER: 'viewer'
 };
 
-const roles: Record<RoleKey, { label: string; access: string[]; description: string }> = {
+const roles: Record<RoleKey, { label: string; landingLabel: string; icon: any; color: string; access: string[]; description: string }> = {
   IT_ADMIN: {
     label: 'IT Admin',
+    landingLabel: 'IT Admin',
+    icon: Shield,
+    color: 'blue',
     access: ['dashboard', 'users', 'devices', 'assets', 'hr', 'finance', 'security', 'reports', 'audit'],
-    description: 'Full operational visibility across IT, security, assets and reports.'
+    description: 'Manage systems, users, security and infrastructure.'
   },
   HELPDESK: {
     label: 'Helpdesk',
+    landingLabel: 'Helpdesk',
+    icon: Headphones,
+    color: 'orange',
     access: ['dashboard', 'users', 'devices', 'assets', 'reports'],
-    description: 'Support users, devices and asset inventory.'
+    description: 'Resolve tickets, support users and manage devices.'
   },
   SECURITY: {
     label: 'Security',
+    landingLabel: 'Security Officer',
+    icon: Lock,
+    color: 'purple',
     access: ['dashboard', 'users', 'devices', 'security', 'reports', 'audit'],
-    description: 'Review risks, MFA gaps, compliance and audit activity.'
+    description: 'Monitor security, threats and compliance.'
   },
   HR: {
     label: 'HR',
+    landingLabel: 'HR',
+    icon: Users,
+    color: 'green',
     access: ['dashboard', 'hr'],
-    description: 'View employee asset assignments and return status only.'
+    description: 'Review employee asset assignments and returns.'
   },
   FINANCE: {
     label: 'Finance',
+    landingLabel: 'Finance',
+    icon: WalletCards,
+    color: 'cyan',
     access: ['dashboard', 'finance', 'reports'],
-    description: 'Review asset costs, vendors, warranty and finance exports.'
+    description: 'Review asset cost, vendors and warranty reports.'
   },
   VIEWER: {
     label: 'Viewer',
+    landingLabel: 'Auditor',
+    icon: ClipboardCheck,
+    color: 'indigo',
     access: ['dashboard', 'users', 'devices', 'assets'],
-    description: 'Read-only overview of core IT information.'
+    description: 'Review logs, inventory and read-only information.'
   }
 };
 
@@ -157,15 +175,15 @@ function initialData() {
 }
 
 function getRoleFromHash(): RoleKey {
-  const route = window.location.hash.replace('#/', '') || 'it-admin';
+  const route = window.location.hash.replace('#/', '') || '';
   return routeToRole[route] || 'IT_ADMIN';
 }
 
 function App() {
   const [role, setRole] = useState<RoleKey>(getRoleFromHash());
+  const [entered, setEntered] = useState(false);
   const [page, setPage] = useState('dashboard');
   const [q, setQ] = useState('');
-  const [showSplash, setShowSplash] = useState(true);
   const [editingId, setEditingId] = useState('');
   const [assetForm, setAssetForm] = useState<Asset>(blankAsset);
   const [notice, setNotice] = useState('');
@@ -197,7 +215,13 @@ function App() {
   }
 
   function changeRole(nextRole: RoleKey) {
+    setRole(nextRole);
     window.location.hash = `/${roleToRoute[nextRole]}`;
+  }
+
+  function enterPortal() {
+    window.location.hash = `/${roleToRoute[role]}`;
+    setEntered(true);
   }
 
   function saveAsset(e: React.FormEvent) {
@@ -257,7 +281,7 @@ function App() {
     const csv = [
       headers.join(','),
       ...rows.map(row => headers.map(h => `"${String(row[h] ?? '').replaceAll('"', '""')}"`).join(','))
-    ].join('\\n');
+    ].join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -330,26 +354,20 @@ function App() {
     warrantyAssets: data.assets.map((a: Asset) => ({ assetTag: a.assetTag, model: a.model, warrantyExpiry: a.warrantyExpiry, assignedTo: a.assignedTo }))
   };
 
-  if (showSplash) {
-    return (
-      <SplashScreen
-        onSkip={() => {
-          setShowSplash(false);
-        }}
-      />
-    );
+  if (!entered) {
+    return <LandingPage selectedRole={role} onRoleChange={changeRole} onEnter={enterPortal} />;
   }
 
   return (
     <div className="app-shell">
       <aside className="sidebar">
         <div className="brand">
-          <div className="brand-mark"><Sparkles size={22} /></div>
+          <img src={`${import.meta.env.BASE_URL}trufla-logo.png`} alt="Trufla Technology" />
           <div><h2>IT Ops</h2><p>SaaS Portal Demo</p></div>
         </div>
 
         <div className="role-card">
-          <span>Static role route</span>
+          <span>Current role</span>
           <select value={role} onChange={e => changeRole(e.target.value as RoleKey)}>
             {Object.entries(roles).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
           </select>
@@ -389,9 +407,9 @@ function App() {
 
         <section className="hero-panel">
           <div>
-            <span className="eyebrow">GitHub Pages Ready</span>
-            <h2>Static role-based IT operations portal.</h2>
-            <p>Use the role routes or role buttons to preview IT Admin, Helpdesk, Security, HR, Finance and Viewer experiences.</p>
+            <span className="eyebrow">Role: {roles[role].label}</span>
+            <h2>Unified IT operations command center.</h2>
+            <p>{roles[role].description}</p>
           </div>
           <div className="role-pills">
             {Object.entries(roles).map(([k, v]) => <button key={k} className={role === k ? 'selected' : ''} onClick={() => changeRole(k as RoleKey)}>{v.label}</button>)}
@@ -414,32 +432,68 @@ function App() {
   );
 }
 
+function LandingPage({ selectedRole, onRoleChange, onEnter }: { selectedRole: RoleKey; onRoleChange: (role: RoleKey) => void; onEnter: () => void }) {
+  const featureItems = [
+    ['Secure', 'Enterprise grade security', Shield, 'blue'],
+    ['Unified', 'All systems in one place', MonitorCheck, 'green'],
+    ['Fast', 'Real-time operations', Rocket, 'orange'],
+    ['Smart', 'Data-driven insights', BarChart3, 'purple']
+  ];
 
-function SplashScreen({ onSkip }: { onSkip: () => void }) {
   return (
-    <main className="splash-screen">
-      <div className="splash-orb orb-one" />
-      <div className="splash-orb orb-two" />
-      <section className="splash-card">
-        <div className="trufla-logo-mark">
-          <span>T</span>
-          <i />
+    <main className="landing-page">
+      <div className="landing-glow glow-left" />
+      <div className="landing-glow glow-right" />
+      <div className="circuit-lines left" />
+      <div className="circuit-lines right" />
+
+      <section className="landing-content">
+        <div className="logo-halo">
+          <img className="landing-logo" src={`${import.meta.env.BASE_URL}trufla-logo.png`} alt="Trufla Technology" />
         </div>
-        <div className="trufla-wordmark">
-          <span className="letter">T</span>
-          <span className="letter">r</span>
-          <span className="letter">u</span>
-          <span className="letter">f</span>
-          <span className="letter">l</span>
-          <span className="letter">a</span>
-        </div>
-        <p>IT Operations Portal</p>
-        <small className="splash-hint">This page will stay here until you click Enter Portal</small>
-        <small className="splash-version-note">Manual splash mode enabled</small>
-        <div className="splash-loader">
+
+        <h1>Trufla IT Ops Portal</h1>
+        <p className="landing-subtitle">All your IT operations in one powerful platform</p>
+
+        <div className="role-heading">
+          <span />
+          <strong>Select your role</strong>
           <span />
         </div>
-        <button onClick={onSkip}>Enter Portal</button>
+
+        <div className="landing-role-grid">
+          {Object.entries(roles).map(([key, role]) => {
+            const Icon = role.icon;
+            const active = selectedRole === key;
+            return (
+              <button key={key} className={`landing-role-card ${role.color} ${active ? 'active' : ''}`} onClick={() => onRoleChange(key as RoleKey)}>
+                <Icon size={40} />
+                <strong>{role.landingLabel}</strong>
+                <small>{role.description}</small>
+                <i />
+              </button>
+            );
+          })}
+        </div>
+
+        <button className="enter-portal-btn" onClick={onEnter}>
+          <Rocket size={24} />
+          Enter Portal
+        </button>
+
+        <div className="landing-features">
+          {featureItems.map(([title, desc, Icon, color]: any) => (
+            <div className={`landing-feature ${color}`} key={title}>
+              <Icon size={26} />
+              <div>
+                <strong>{title}</strong>
+                <span>{desc}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <footer>© 2026 Trufla Technology. Demo portal for IT operations.</footer>
       </section>
     </main>
   );
@@ -482,7 +536,6 @@ function AssetsPage({ rows, form, setForm, editing, save, cancel, edit, del, exp
   return (
     <>
       <div className="action-row">
-        <button className="btn soft"><Upload size={16}/> Import placeholder</button>
         <button className="btn primary" onClick={exportCsv}><Download size={16}/> Export CSV</button>
       </div>
 
