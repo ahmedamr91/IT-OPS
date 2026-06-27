@@ -75,3 +75,9 @@ Then push to `main`.
 
 Do not deploy from branch root.  
 This app must be deployed by GitHub Actions from the generated `dist` folder.
+
+
+## Manual splash mode
+
+The splash screen always appears on page load and never redirects automatically.
+It only closes when the user clicks **Enter Portal**.

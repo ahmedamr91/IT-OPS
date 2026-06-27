@@ -482,3 +482,11 @@ tbody tr:hover td { background: rgba(248,250,252,.75); }
   color: #94a3b8;
   font-size: 13px;
 }
+
+.splash-version-note {
+  margin-top: -8px;
+  color: rgba(255,255,255,.55);
+  font-size: 11px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}

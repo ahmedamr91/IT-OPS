@@ -165,7 +165,7 @@ function App() {
   const [role, setRole] = useState<RoleKey>(getRoleFromHash());
   const [page, setPage] = useState('dashboard');
   const [q, setQ] = useState('');
-  const [showSplash, setShowSplash] = useState(() => !sessionStorage.getItem('it_ops_splash_seen'));
+  const [showSplash, setShowSplash] = useState(true);
   const [editingId, setEditingId] = useState('');
   const [assetForm, setAssetForm] = useState<Asset>(blankAsset);
   const [notice, setNotice] = useState('');
@@ -334,7 +334,6 @@ function App() {
     return (
       <SplashScreen
         onSkip={() => {
-          sessionStorage.setItem('it_ops_splash_seen', 'true');
           setShowSplash(false);
         }}
       />
@@ -435,7 +434,8 @@ function SplashScreen({ onSkip }: { onSkip: () => void }) {
           <span className="letter">a</span>
         </div>
         <p>IT Operations Portal</p>
-        <small className="splash-hint">Click Enter Portal to continue</small>
+        <small className="splash-hint">This page will stay here until you click Enter Portal</small>
+        <small className="splash-version-note">Manual splash mode enabled</small>
         <div className="splash-loader">
           <span />
         </div>
