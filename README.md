@@ -1,23 +1,39 @@
-# Trufla IT Ops Portal - GitHub Pages Static Demo
+# Trufla IT Ops Portal - GitHub Pages Fixed Version
 
-GitHub Pages cannot run the FastAPI backend. This is a frontend-only static version with realistic dummy data.
+This is the corrected GitHub Pages static version.
 
-## Static role routes
+## Fixes included
 
-- `/#/it-admin`
-- `/#/helpdesk`
-- `/#/security`
-- `/#/hr`
-- `/#/finance`
-- `/#/viewer`
+- Correct Vite GitHub Pages base path: `/IT-OPS/`
+- GitHub Actions deploys `dist`, not raw source files
+- No backend dependency
+- No FastAPI calls
+- No `127.0.0.1` API calls
+- Static role routes:
+  - `/#/it-admin`
+  - `/#/helpdesk`
+  - `/#/security`
+  - `/#/hr`
+  - `/#/finance`
+  - `/#/viewer`
 
-## Run local
+## Run locally
 
 ```bash
 npm install
 npm run dev
 ```
 
+## Build locally
+
+```bash
+npm run build
+npm run preview
+```
+
 ## Deploy
 
-Push to GitHub, then Settings -> Pages -> Source: GitHub Actions.
+Push to GitHub.  
+Then check:
+
+Repository → Settings → Pages → Source: GitHub Actions
