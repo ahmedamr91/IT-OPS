@@ -2,6 +2,12 @@
 
 Professional GitHub Pages-ready IT Operations Portal demo.
 
+## New in this version
+
+- Animated Trufla-style startup page
+- Skip/Enter Portal button
+- Animation only appears once per browser session
+
 ## What this version is
 
 This is a production-style static demo that works on GitHub Pages.

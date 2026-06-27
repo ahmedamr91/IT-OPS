@@ -165,6 +165,7 @@ function App() {
   const [role, setRole] = useState<RoleKey>(getRoleFromHash());
   const [page, setPage] = useState('dashboard');
   const [q, setQ] = useState('');
+  const [showSplash, setShowSplash] = useState(() => !sessionStorage.getItem('it_ops_splash_seen'));
   const [editingId, setEditingId] = useState('');
   const [assetForm, setAssetForm] = useState<Asset>(blankAsset);
   const [notice, setNotice] = useState('');
@@ -177,6 +178,15 @@ function App() {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }, [data]);
+
+  useEffect(() => {
+    if (!showSplash) return;
+    const timer = window.setTimeout(() => {
+      sessionStorage.setItem('it_ops_splash_seen', 'true');
+      setShowSplash(false);
+    }, 2600);
+    return () => window.clearTimeout(timer);
+  }, [showSplash]);
 
   useEffect(() => {
     const onHash = () => setRole(getRoleFromHash());
@@ -329,6 +339,17 @@ function App() {
     warrantyAssets: data.assets.map((a: Asset) => ({ assetTag: a.assetTag, model: a.model, warrantyExpiry: a.warrantyExpiry, assignedTo: a.assignedTo }))
   };
 
+  if (showSplash) {
+    return (
+      <SplashScreen
+        onSkip={() => {
+          sessionStorage.setItem('it_ops_splash_seen', 'true');
+          setShowSplash(false);
+        }}
+      />
+    );
+  }
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -400,6 +421,35 @@ function App() {
         {page === 'audit' && <DataPanel title="Audit Trail" rows={filtered(data.audit)} exportCsv={() => exportCsv(data.audit, 'audit.csv')} />}
       </main>
     </div>
+  );
+}
+
+
+function SplashScreen({ onSkip }: { onSkip: () => void }) {
+  return (
+    <main className="splash-screen">
+      <div className="splash-orb orb-one" />
+      <div className="splash-orb orb-two" />
+      <section className="splash-card">
+        <div className="trufla-logo-mark">
+          <span>T</span>
+          <i />
+        </div>
+        <div className="trufla-wordmark">
+          <span className="letter">T</span>
+          <span className="letter">r</span>
+          <span className="letter">u</span>
+          <span className="letter">f</span>
+          <span className="letter">l</span>
+          <span className="letter">a</span>
+        </div>
+        <p>IT Operations Portal</p>
+        <div className="splash-loader">
+          <span />
+        </div>
+        <button onClick={onSkip}>Enter Portal</button>
+      </section>
+    </main>
   );
 }
 

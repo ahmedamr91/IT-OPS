@@ -291,3 +291,188 @@ tbody tr:hover td { background: rgba(248,250,252,.75); }
   .global-search { width: 100%; margin-top: 14px; }
   .role-pills { justify-content: flex-start; min-width: 0; margin-top: 16px; }
 }
+
+
+/* Animated starting page */
+.splash-screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(37,99,235,.30), transparent 30rem),
+    radial-gradient(circle at 80% 20%, rgba(124,58,237,.28), transparent 28rem),
+    linear-gradient(135deg, #020617 0%, #0f172a 45%, #111827 100%);
+  color: white;
+}
+
+.splash-orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(10px);
+  opacity: .45;
+  animation: floatOrb 6s ease-in-out infinite;
+}
+
+.orb-one {
+  width: 280px;
+  height: 280px;
+  background: #2563eb;
+  top: 8%;
+  left: 12%;
+}
+
+.orb-two {
+  width: 340px;
+  height: 340px;
+  background: #7c3aed;
+  right: 10%;
+  bottom: 8%;
+  animation-delay: 1.2s;
+}
+
+.splash-card {
+  width: min(520px, calc(100vw - 40px));
+  min-height: 430px;
+  border-radius: 34px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(26px);
+  box-shadow: 0 35px 90px rgba(0,0,0,.35);
+  display: grid;
+  place-items: center;
+  align-content: center;
+  padding: 38px;
+  position: relative;
+  z-index: 2;
+  animation: splashIn .85s ease-out both;
+}
+
+.trufla-logo-mark {
+  width: 104px;
+  height: 104px;
+  border-radius: 30px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  box-shadow: 0 24px 60px rgba(37,99,235,.38);
+  animation: logoPulse 2.1s ease-in-out infinite;
+}
+
+.trufla-logo-mark span {
+  font-size: 54px;
+  font-weight: 950;
+  letter-spacing: -.08em;
+}
+
+.trufla-logo-mark i {
+  position: absolute;
+  inset: -7px;
+  border-radius: 35px;
+  border: 1px solid rgba(255,255,255,.35);
+  animation: ringSpin 3.5s linear infinite;
+}
+
+.trufla-wordmark {
+  margin-top: 24px;
+  display: flex;
+  gap: 2px;
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: -.06em;
+}
+
+.trufla-wordmark .letter {
+  display: inline-block;
+  animation: letterRise .7s ease-out both;
+}
+
+.trufla-wordmark .letter:nth-child(1) { animation-delay: .15s; }
+.trufla-wordmark .letter:nth-child(2) { animation-delay: .22s; }
+.trufla-wordmark .letter:nth-child(3) { animation-delay: .29s; }
+.trufla-wordmark .letter:nth-child(4) { animation-delay: .36s; }
+.trufla-wordmark .letter:nth-child(5) { animation-delay: .43s; }
+.trufla-wordmark .letter:nth-child(6) { animation-delay: .50s; }
+
+.splash-card p {
+  margin: 6px 0 26px;
+  color: #cbd5e1;
+  font-size: 16px;
+}
+
+.splash-loader {
+  width: 260px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.16);
+  overflow: hidden;
+}
+
+.splash-loader span {
+  display: block;
+  height: 100%;
+  width: 42%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa, #22c55e);
+  animation: loadingBar 1.25s ease-in-out infinite;
+}
+
+.splash-card button {
+  margin-top: 24px;
+  border: 1px solid rgba(255,255,255,.20);
+  background: rgba(255,255,255,.10);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.splash-card button:hover {
+  background: white;
+  color: #2563eb;
+  transform: translateY(-1px);
+}
+
+@keyframes splashIn {
+  from { opacity: 0; transform: translateY(18px) scale(.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes logoPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 24px 60px rgba(37,99,235,.38); }
+  50% { transform: scale(1.04); box-shadow: 0 30px 76px rgba(124,58,237,.48); }
+}
+
+@keyframes ringSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes letterRise {
+  from { opacity: 0; transform: translateY(18px) rotateX(30deg); }
+  to { opacity: 1; transform: translateY(0) rotateX(0); }
+}
+
+@keyframes loadingBar {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(260%); }
+}
+
+@keyframes floatOrb {
+  0%, 100% { transform: translate3d(0,0,0) scale(1); }
+  50% { transform: translate3d(22px,-26px,0) scale(1.06); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-orb,
+  .trufla-logo-mark,
+  .trufla-logo-mark i,
+  .trufla-wordmark .letter,
+  .splash-loader span,
+  .splash-card {
+    animation: none;
+  }
+}
